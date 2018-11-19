@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrabbleGenerator", "CrossWordGeneratorWPF\ScrabbleGenerator.csproj", "{1851AA1D-6D10-494F-AEA1-D2B676A7EEF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrabbleGenerator", "ScrabbleGeneratorWPF\ScrabbleGenerator.csproj", "{1851AA1D-6D10-494F-AEA1-D2B676A7EEF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
