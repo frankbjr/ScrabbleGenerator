@@ -12,3 +12,5 @@ There currently isn't an installer.  To use:
 * Download a release
 * Unzip the release
 * Run the unzipped application
+
+![image](https://user-images.githubusercontent.com/34729473/48690446-728ebb80-eb83-11e8-8a0f-ce43ee91dfe2.png)
