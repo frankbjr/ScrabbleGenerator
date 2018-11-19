@@ -1,0 +1,54 @@
+﻿<Window x:Class="Kranken.ScrabbleGenerator.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kranken.ScrabbleGenerator" mc:Ignorable="d" Background="RoyalBlue"
+        Icon="/resources/ScrabbleIcon.ico"
+        Title="Scrabble Generator" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+
+        <DockPanel DockPanel.Dock="Top" Margin="5">
+            <StackPanel Name="LeftSideStackPanel" Orientation="Vertical" DockPanel.Dock="Left" Margin="2">
+                <TextBlock>Enter comma separated words here:</TextBlock>
+                <TextBox x:Name="tbInput" Margin="5" Width="250" Text="{Binding NamesInput}" CharacterCasing="Upper" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 10">
+                    <Button Padding="5" Width="70" Click="GenerateButton_Click">Generate</Button>
+                    <Button Padding="5" Width="70" Margin="20 0 20 0" Click="QuitButton_Click">Quit</Button>
+                    <Button Padding="5" Width="70" Click="ClearButton_Click">Clear</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                    <TextBlock>Solution Font Size:</TextBlock>
+                    <TextBox Margin="10 0 0 0" Width="40" Text="{Binding SolutionFontSize}"/>
+                </StackPanel>
+                <Slider Name="FontSizeSlider" Minimum="10" Maximum="120" Value="{Binding SolutionFontSize}" TickPlacement="TopLeft" IsSnapToTickEnabled="True">
+                    <Slider.Ticks>
+                        <DoubleCollection>10,20,30,40,50,60,70,80,90,100,110</DoubleCollection>
+                    </Slider.Ticks>
+                </Slider>
+            </StackPanel>
+            <GroupBox DockPanel.Dock="Right" Header="Log Messages" Height="{Binding ActualHeight, ElementName=LeftSideStackPanel}">
+                <ListView Background="Transparent" BorderThickness="0" ItemsSource="{Binding Messages}" Foreground="Yellow" />
+            </GroupBox>
+        </DockPanel>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button Padding="20 5 20 5" Margin="0 5 10 5" Click="Print_SelectedSolutions">Print Selected Solutions</Button>
+            <Button Padding="25 5 25 5" Margin="0 5 10 5" Click="Print_AllSolutions">Print All Solutions</Button>
+        </StackPanel>
+        <ProgressBar DockPanel.Dock="Bottom" Height="10" Margin="5 0 5 2" Minimum="0" Maximum="100"
+                Value="{Binding Progress}" />
+
+        <ListBox ItemsSource="{Binding Solutions}" x:Name="SolutionLV" SizeChanged="SolutionLV_SizeChanged" FontSize="{Binding Value, ElementName=FontSizeSlider}" SelectionMode="Multiple">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Loaded="WrapPanel_Loaded" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:ScrabbleSolutionControl ScrabbleSolution="{Binding}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Window>
