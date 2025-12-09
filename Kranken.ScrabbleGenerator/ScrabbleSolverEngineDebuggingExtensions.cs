@@ -19,12 +19,11 @@ namespace Kranken.ScrabbleGenerator
 		/// Prints a set of Solutions to the console.
 		/// </summary>
 		/// <param name="solutions">An IEnumerable of solutions.  If you set this to null, it will print all the valid solutions the engine must recently found.</param>
-		public static void PrintSolutionsToConsole(this ScrabbleSolverEngine engine, IEnumerable<ScrabbleSolution> solutions = null)
+		public static void PrintSolutionsToConsole(this ScrabbleSolverEngine engine, IEnumerable<ScrabbleSolution>? solutions = null)
 		{
-			if(solutions == null)
-				solutions = engine.UniqueSolutions;
+			solutions ??= engine.UniqueSolutions;
 
-			foreach(var solution in solutions)
+			foreach(var solution in solutions!)
 			{
 				solution.PrintSolutionToConsole();
 			}

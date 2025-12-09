@@ -35,9 +35,9 @@ namespace Kranken.ScrabbleGenerator
 			var ctl = d as ScrabbleSolutionControl;
 			var solution = e.NewValue as ScrabbleSolution;
 
-			ctl.ResetControl();
+			ctl!.ResetControl();
 
-			if(solution.Count == 0)
+			if(solution!.Count == 0)
 				return;
 
 			var rect = solution.Rectangle;

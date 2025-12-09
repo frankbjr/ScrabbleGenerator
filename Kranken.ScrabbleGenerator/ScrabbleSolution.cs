@@ -39,7 +39,7 @@ namespace Kranken.ScrabbleGenerator
 		}
 
 		//Methods
-		public override bool Equals(object solution)
+		public override bool Equals(object? solution)
 		{
 			if(solution is ScrabbleSolution solutionB)
 			{
@@ -136,7 +136,7 @@ namespace Kranken.ScrabbleGenerator
 					{
 						if(word[y] == existingWord.Word[x])
 						{
-							ScrabbleWordPlacement wordPlacementCandidate = null;
+							ScrabbleWordPlacement? wordPlacementCandidate = null;
 							switch(existingWord.Direction)
 							{
 							case DirectionEnum.Horizontal:
@@ -149,8 +149,8 @@ namespace Kranken.ScrabbleGenerator
 							}
 
 							// Only add this placement it the rest of word doesn't have any intersection problems.
-							if(AreWordIntersectionsValid(wordPlacementCandidate))
-								intersectionCandidates.Add(wordPlacementCandidate);
+							if(AreWordIntersectionsValid(wordPlacementCandidate!))
+								intersectionCandidates.Add(wordPlacementCandidate!);
 						}
 					}
 				}
@@ -235,7 +235,7 @@ namespace Kranken.ScrabbleGenerator
 			return true;
 		}
 
-		internal ScrabbleWordPlacement FindWordAtCoordinates(int x, int y)
+		internal ScrabbleWordPlacement? FindWordAtCoordinates(int x, int y)
 		{
 			var point = new Point(x, y);
 

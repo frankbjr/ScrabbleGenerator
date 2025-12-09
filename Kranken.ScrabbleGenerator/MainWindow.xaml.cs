@@ -9,19 +9,18 @@ namespace Kranken.ScrabbleGenerator
 {
 	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
-		private ScrabbleSolverEngine _solver;
-		private WrapPanel _wrapPanel;
-		private double _solutionFontSize = 30;
+		private readonly ScrabbleSolverEngine _solver;
+		private WrapPanel? _wrapPanel;
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
 		public MainWindow()
 		{
 			_solver = new ScrabbleSolverEngine();
-			_solver.NewLogMessage += Solver_NewLogMessage;
-			_solver.ProgressChanged += Solver_OnProgressChanged;
+			_solver.NewLogMessage += Solver_NewLogMessage!;
+			_solver.ProgressChanged += Solver_OnProgressChanged!;
 
-			Messages = new ObservableCollection<string>();
+			Messages = [];
 
 			InitializeComponent();
 
@@ -32,7 +31,7 @@ namespace Kranken.ScrabbleGenerator
 
 		public double SolutionFontSize
 		{
-			get => _solutionFontSize;
+			get;
 			set
 			{
 				// Let's clamp the values
@@ -40,16 +39,16 @@ namespace Kranken.ScrabbleGenerator
 				value = Math.Max(10, value);
 				value = Math.Round(value);
 
-				_solutionFontSize = value;
+				field = value;
 				OnNotifyPropertyChanged(nameof(SolutionFontSize));
 			}
-		}
+		} = 30;
 
-		public string NamesInput { get; set; } = "FRANK, KRISTEN, ZACHARY, ALEXIS";
+        public string NamesInput { get; set; } = "FRANK, KRISTEN, ZACHARY, ALEXIS";
 
 		public ObservableCollection<string> Messages { get; }
 
-		public ObservableCollection<ScrabbleSolution> Solutions => _solver.UniqueSolutions;
+		public ObservableCollection<ScrabbleSolution> Solutions => _solver.UniqueSolutions!;
 
 		private void GenerateButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -94,8 +93,7 @@ namespace Kranken.ScrabbleGenerator
 		{
 			// Total Kludge but it works.
 
-			if(_wrapPanel != null)
-				_wrapPanel.Width = e.NewSize.Width - 25;
+			_wrapPanel?.Width = e.NewSize.Width - 25;
 
 			e.Handled = true;
 		}
@@ -110,7 +108,7 @@ namespace Kranken.ScrabbleGenerator
 		private void ClearButton_Click(object sender, RoutedEventArgs e)
 		{
 			Messages.Clear();
-			_solver.UniqueSolutions.Clear();
+			_solver.UniqueSolutions!.Clear();
 		}
 
 		private void OnNotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -125,6 +123,6 @@ namespace Kranken.ScrabbleGenerator
 			}
 		}
 
-		private void Print_AllSolutions(object sender, RoutedEventArgs e) => Printing.PrintSolutions(Solutions.ToList(), SolutionFontSize);
+        private void Print_AllSolutions(object sender,RoutedEventArgs e) => Printing.PrintSolutions([.. Solutions],SolutionFontSize);
 	}
 }

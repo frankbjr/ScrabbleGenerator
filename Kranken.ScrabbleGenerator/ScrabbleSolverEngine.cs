@@ -19,36 +19,35 @@ namespace Kranken.ScrabbleGenerator
 {
 	public class ScrabbleSolverEngine
 	{
-		//Fields
-		private int _progressPercentage;
+        //Fields
 
-		public event EventHandler<LogMessageEventArgs> NewLogMessage;
+        public event EventHandler<LogMessageEventArgs>? NewLogMessage;
 
-		public event EventHandler<ProgressChangedEventArgs> ProgressChanged;
+		public event EventHandler<ProgressChangedEventArgs>? ProgressChanged;
 
 		//Properties
 		public DateTime StartTime { get; private set; }
 
 		public DateTime EndTime { get; private set; }
-		public ObservableCollection<ScrabbleSolution> UniqueSolutions { get; private set; }
+		public ObservableCollection<ScrabbleSolution>? UniqueSolutions { get; private set; }
 		public int ValidSolutionsFound { get; private set; }
 		public int SolutionsConsidered { get; private set; }
 
 		public int ProgressPercentage
 		{
-			get => _progressPercentage;
+			get;
 			set
 			{
 				// Clip our value to between 0 and 100
 				value = Math.Min(100, value);
 				value = Math.Max(0, value);
 
-				if(value != _progressPercentage)
+				if(value != field)
 				{
-					_progressPercentage = value;
+					field = value;
 
 					// Tell anyone that cares
-					ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(_progressPercentage, null));
+					ProgressChanged?.Invoke(this, new ProgressChangedEventArgs(field, null));
 				}
 			}
 		}
@@ -68,7 +67,7 @@ namespace Kranken.ScrabbleGenerator
 		{
 			ResetStatistics();
 
-			var namesetPermutations = GetAllNamesetPermutations(wordList, wordList.Count()).ToList();
+			var namesetPermutations = GetAllNamesetPermutations(wordList,wordList.Count).ToList();
 			if(namesetPermutations.Count < 2)
 			{
 				OnLogMessage("ERROR: Must have at least two names.");
@@ -98,7 +97,7 @@ namespace Kranken.ScrabbleGenerator
 
 				// Now take any solutions we just found, and only keep the ones that are unique
 				// as compared to previously found solutions.
-				AddAnyUniqueSolutions(UniqueSolutions, currentNamesetSolutions);
+				AddAnyUniqueSolutions(UniqueSolutions!, currentNamesetSolutions);
 			}
 
 			EndTime = DateTime.Now;
@@ -117,15 +116,15 @@ namespace Kranken.ScrabbleGenerator
 			// Observable collection needs to be created on the engine's thread
 			// otherwise updating it will cause an exception.
 			// We can ensure that by creating the thread here.
-			UniqueSolutions = new ObservableCollection<ScrabbleSolution>();
+			UniqueSolutions = [];
 		}
 
 		private void LogExecutionStatistics()
 		{
 			OnLogMessage($"Solutions considered: {SolutionsConsidered}");
 			OnLogMessage($"Valid Solutions Found: {ValidSolutionsFound}");
-			OnLogMessage($"Unique Valid Solutions: {UniqueSolutions.Count}");
-			OnLogMessage($"Elapsed Time: {(EndTime - StartTime).ToString()}");
+			OnLogMessage($"Unique Valid Solutions: {UniqueSolutions!.Count}");
+			OnLogMessage($"Elapsed Time: {EndTime - StartTime}");
 		}
 
 		private static List<List<string>> GetAllNamesetPermutations(List<string> list, int length)
@@ -134,9 +133,9 @@ namespace Kranken.ScrabbleGenerator
 			// Recursion is so elegant sometimes!
 
 			if(length == 1)
-				return list.Select(t => new List<string> { t }).ToList();
+				return [.. list.Select(t => new List<string> { t })];
 
-			return GetAllNamesetPermutations(list, length - 1).SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new List<string> { t2 }).ToList()).ToList();
+			return [.. GetAllNamesetPermutations(list, length - 1).SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat([t2]).ToList())];
 		}
 
 		private List<ScrabbleSolution> AddWordToAllExistingSolutions(string word, List<ScrabbleSolution> currentNamesetSolutions)
